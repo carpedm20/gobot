@@ -21,8 +21,9 @@ func main() {
 	}
 
 	f.Login(fbtoken)
-	access := f.GetAccessByName("유니스트 내가 전해주까")
+	access := f.GetAccessByName("밥먹기 십오분전 - 유니스트")
+
 	println(access.Name)
-	access.Post("")
+	//access.Post("I have a cue light I can use to show you when I'm joking, if you like.")
 	access.PostLink("https://github.com/carpedm20/gobot")
 }

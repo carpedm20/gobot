@@ -75,7 +75,9 @@ func (g *Facebook) SetProxy(url string) {
 }
 
 func (g *Facebook) Login(accessToken string) {
-	resp, err := g.Client.Get(page_access_token_url + accessToken)
+	link := page_access_token_url + accessToken
+	resp, err := g.Client.Get(link)
+	log.Println("Link : " + link)
 	if err != nil {
 		panic(err)
 	}
@@ -96,6 +98,21 @@ func (g *Facebook) GetAccessByName(name string) (target Account) {
 	return
 }
 
+func (a *Account) PostImage(string) {
+	data := strings.NewReader(
+		u.Values{
+			"message":      {text},
+			"access_token": {a.Access_token},
+		}.Encode(),
+	)
+	resp, err := a.Client.Post(api_url+"/me", "application/json", data)
+	if err != nil {
+		panic(err)
+	}
+	post := &Post{}
+	GetStructFromResponse(resp, post)
+}
+
 func (a *Account) Post(text string) {
 	data := strings.NewReader(
 		u.Values{
@@ -114,7 +131,9 @@ func (a *Account) Post(text string) {
 func (a *Account) PostLink(url string) {
 	data := strings.NewReader(
 		u.Values{
-			"link": {url},
+			"link":         {url},
+			"message":      {"I have a cue light I can use to show you when I'm joking, if you like."},
+			"access_token": {a.Access_token},
 		}.Encode(),
 	)
 	resp, err := a.Client.Post(api_url+"/feed", "application/json", data)
