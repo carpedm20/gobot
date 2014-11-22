@@ -1,13 +1,14 @@
 package facebook
 
 import (
-	"crypto/tls"
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"strings"
+
+	"crypto/tls"
 	"net/http"
 	u "net/url"
-	"strings"
 )
 
 const (
@@ -100,6 +101,20 @@ func (a *Account) Post(text string) {
 		u.Values{
 			"message":      {text},
 			"access_token": {a.Access_token},
+		}.Encode(),
+	)
+	resp, err := a.Client.Post(api_url+"/feed", "application/json", data)
+	if err != nil {
+		panic(err)
+	}
+	post := &Post{}
+	GetStructFromResponse(resp, post)
+}
+
+func (a *Account) PostLink(url string) {
+	data := strings.NewReader(
+		u.Values{
+			"link": {url},
 		}.Encode(),
 	)
 	resp, err := a.Client.Post(api_url+"/feed", "application/json", data)

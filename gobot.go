@@ -23,5 +23,6 @@ func main() {
 	f.Login(fbtoken)
 	access := f.GetAccessByName("유니스트 내가 전해주까")
 	println(access.Name)
-	access.Post("test123")
+	access.Post("")
+	access.PostLink("https://github.com/carpedm20/gobot")
 }
